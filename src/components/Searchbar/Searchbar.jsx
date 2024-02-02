@@ -1,51 +1,45 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Searchbar.module.css';
 import { FaSearch } from 'react-icons/fa';
 
-class Searchbar extends Component {
-  state = {
-    query: '',
+const Searchbar = ({ onSearch }) => {
+  const [query, setQuery] = useState('');
+
+  const handleChange = event => {
+    setQuery(event.target.value);
   };
 
-  handleChange = event => {
-    this.setState({ query: event.target.value });
-  };
-
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.props.onSearch(this.state.query);
+    onSearch(query);
   };
 
-  handleClick = () => {
-    this.setState({ query: '' });
+  const handleClick = () => {
+    setQuery('');
   };
 
-  render() {
-    const { query } = this.state;
+  return (
+    <header className={styles.Searchbar}>
+      <form className={styles.SearchForm} onSubmit={handleSubmit}>
+        <button type="submit" className={styles.button}>
+          <FaSearch />
+        </button>
 
-    return (
-      <header className={styles.Searchbar}>
-        <form className={styles.SearchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={styles.button}>
-            <FaSearch /> 
-          </button>
-
-          <input
-            className={styles.input}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={query}
-            onChange={this.handleChange}
-            onClick={this.handleClick}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className={styles.input}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={query}
+          onChange={handleChange}
+          onClick={handleClick}
+        />
+      </form>
+    </header>
+  );
+};
 
 Searchbar.propTypes = {
   onSearch: PropTypes.func.isRequired,
